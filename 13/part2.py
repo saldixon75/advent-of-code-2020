@@ -35,8 +35,8 @@ for bus in sorted(rules.keys(),reverse=True):
     #print("Woohoo! bus = " + str(bus) + " ts=" + str(timestamp) );    
     increment = increment * bus;
     print("Increment = " + str(increment));
-    found = False;
-  
+
+print("Earliest good timestamp = " + str(timestamp));   
 
 
 
