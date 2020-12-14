@@ -30,11 +30,12 @@ def test_for_bus(timestamp, bus, offset):
 increment = 1;
 timestamp = 0;
 for bus in sorted(rules.keys(),reverse=True):
+    print("Using increment = " + str(increment));
     while not test_for_bus(timestamp, bus, rules[bus]):
         timestamp += increment;
     #print("Woohoo! bus = " + str(bus) + " ts=" + str(timestamp) );    
     increment = increment * bus;
-    print("Increment = " + str(increment));
+
 
 print("Earliest good timestamp = " + str(timestamp));   
 
