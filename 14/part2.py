@@ -1,8 +1,9 @@
 import numpy;
-import sys;
+import logging, sys
 import re;
 import time;
 
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 start = time.time();
 
 with open("input.txt") as f:
@@ -80,6 +81,7 @@ end = time.time();
 elapsed = end - start;
 
 print("Grand total = " + str(total) + " (in " + str(elapsed) + " seconds)");
+logging.debug('Total: %d ', total);
 
 
 
