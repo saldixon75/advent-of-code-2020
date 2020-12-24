@@ -16,9 +16,6 @@ messages = list(filter(lambda x: not x == '', messages));
 print('There are ' + str(len(messages)) + ' messages' );
 print('There are ' + str(len(rule_lines)) + ' rules' );
 
-# print('Parsed rule_lines = ' + str(rule_lines));
-# print('Parsed messages = ' + str(messages));
-
 rules = {};
 
 for rule_line in rule_lines:
@@ -49,12 +46,19 @@ def get_rule_regex(rule_number):
     else:
         # it's a list of one or more rules, one after the other
         subrules = list(map(int,rule.split(' '))); # In python3 map() retunrs a map object, unlike python2 which returns a list 
-        # print('subrules are: ' + str(subrules));
         for i in range(len(subrules)):
             regex = regex + get_rule_regex(subrules[i]);
-        # regex = get_rule_regex(subrules[0]) + get_rule_regex(subrules[1]); 
     return regex;    
 
+def how_many(regex, string):
+    count = 0;
+    while( len(string) > 0 ) :
+        print('string = ' + string + ', count = ' + str(count));
+        if (re.match('(' + regex + ')?', string)):
+            matchy = re.match('(' + regex + ')?', string).groups()[0];  #non-greedy. get as many as possible 
+            string = string.replace(matchy,'',1);
+            count += 1;
+    return count;
 
 print('Rule 0 is ' + str(rules[0]));
 
@@ -70,13 +74,21 @@ print('regex for rule 42 = \n' + rule42 + '\n');
 rule31 = get_rule_regex(31);
 print('regex for rule 31 = \n' + rule31+ '\n');
 
-reggie = '^(' + rule42 + ')+' + '(' + rule31 + ')+$';
+reggie = '^((?:' + rule42 + ')+)' + '((?:' + rule31 + ')+)$';
+
 
 valid_messages = [];
 for m in messages:
     if re.match(reggie, m):
-        valid_messages.append(m);
-        
-print('grand total of valid messages =' + str(len(valid_messages)));        
-# print(valid_messages)
+        print('message = ' + m);
+        # check what matched.  there needs to be more occurrences of the 41 group than the 31
+        matched = re.search(reggie, m);
 
+        #  how many fortTwo parts are there? 
+        fortyTwomatch = how_many(rule42, matched.groups()[0]);
+        thirtyOnematch = how_many(rule31, matched.groups()[1]);
+
+        if (fortyTwomatch > thirtyOnematch):
+            valid_messages.append(m);
+
+print('grand total of valid messages =' + str(len(valid_messages)));        
