@@ -5,10 +5,10 @@ import re;
 import time;
 
 number_of_cups = 1000000;
-moves_to_do = 1000;
+moves_to_do = 10000;
 
-number_of_cups = 9;
-moves_to_do = 100;
+# number_of_cups = 9;
+# moves_to_do = 100;
 cupstring='389125467';
 
 cupstring='789465123';
@@ -34,31 +34,27 @@ def get_destination(current_cup, exempt):
             candidate = number_of_cups; 
     return candidate;  
 
-def do_a_move(cups):
+def do_a_move():
+    global cups;
     current_cup = cups.pop(0);
     # print('Current cup = ' + str(current_cup));
-    #  + ', cups = ' + str(cups));
     #  get the next three cups
-    three_to_move = cups[0:3];
-    # print('ccup = ' + str(current_cup) + ' trio=' + str(three_to_move));
-    remainder = cups[3:];
-    # print('three_to_move = ' + str(three_to_move) + ', remainder = ' + str(remainder));
+    first_to_move = cups.pop(0);
+    second_to_move = cups.pop(0);
+    third_to_move = cups.pop(0);
     # print('three_to_move = ' + str(three_to_move));
-    dest = get_destination(current_cup, three_to_move);
+    dest = get_destination(current_cup, [first_to_move, second_to_move, third_to_move]);
     # print('dest = ' + str(dest));
 
     #  now stick em in...
-    destination_pos = remainder.index(dest);
+    destination_pos = cups.index(dest);
     # print('destination_pos = ' + str(destination_pos));
-    pre = remainder[:destination_pos];
-    post = remainder[destination_pos+1:];
+    cups.insert(destination_pos+1,first_to_move);
+    cups.insert(destination_pos+2,second_to_move);
+    cups.insert(destination_pos+3,third_to_move);
 
-    # print('pre =' + str(pre) + ' dest = ' + str(dest) + ' post=' + str(post));
-    new_cups = pre + [dest] + three_to_move + post + [current_cup];  # currnet cup gets moved to the back
-
-    # finally, stick the current_cup at the end
-    # new_cups.append(current_cup);
-    return new_cups;
+    #  now move the current cup to the back
+    cups.append(current_cup);
 
 
 for i in range(moves_to_do):
@@ -66,8 +62,8 @@ for i in range(moves_to_do):
     if i%1000 == 0:
         print('Playing move ' + str(i+1));
         print('time taken so far = ' + str((time.time()-start)/60) + ' minutes');
-    cups = do_a_move(cups);
-    # print(cups);
+    # cups = do_a_move(cups);
+    do_a_move();
 
 
 # print('Now cups = ' + str(cups));
