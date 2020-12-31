@@ -2,7 +2,8 @@ import numpy;
 import sys;
 import copy;
 import re;
-import functools
+import functools;
+import time;
 
 number_of_cups = 1000000;
 # number_of_cups = 9;
@@ -18,6 +19,9 @@ for i in range(len(cups)+1,number_of_cups+1):
 # print('cups are: ' + str(cups));
 print('Number of cups: ' + str(len(cups)))
 
+start = time.time();
+print("Started at " + str(time.gmtime(start)));
+
 
 # @functools.lru_cache()
 def get_destination(current_cup, candidates):
@@ -32,11 +36,14 @@ def get_destination(current_cup, candidates):
 # @functools.lru_cache()
 def do_a_round(cups):
     current_cup = cups.pop(0);
-    # print('Current cup = ' + str(current_cup) + ', cups = ' + str(cups));
+    # print('Current cup = ' + str(current_cup));
+    #  + ', cups = ' + str(cups));
     #  get the next three cups
     three_to_move = cups[0:3];
+    # print('ccup = ' + str(current_cup) + ' trio=' + str(three_to_move));
     remainder = cups[3:];
     # print('three_to_move = ' + str(three_to_move) + ', remainder = ' + str(remainder));
+    # print('three_to_move = ' + str(three_to_move));
     dest = get_destination(current_cup, remainder);
     # print('dest = ' + str(dest));
 
@@ -54,9 +61,15 @@ def do_a_round(cups):
     return new_cups;
 
 
-for i in range(100):
-    print('Playing round ' + str(i+1));
+# for i in range(10000000):
+for i in range(10000):
+    # if (i+1)%1000 == 0:
+    if i%1000 == 0:
+        print('Playing round ' + str(i+1));
+        print('time taken so far = ' + str((time.time()-start)/60) + ' minutes');
     cups = do_a_round(cups);
+    # print(cups);
+
 
 # print('Now cups = ' + str(cups));
 location_of_one = cups.index(1);
@@ -68,5 +81,8 @@ second_one = final_order[1];
 print('first_one = ' + str(first_one) + ' second one = ' + str(second_one));
 print('FINAL RESULT = ' + str(first_one*second_one));
 
+end = time.time();
+print("It took this many seconds: " + str(end-start));
+print("It took this many minutes: " + str((end-start)/60));
 
 
