@@ -2,13 +2,16 @@ import numpy;
 import sys;
 import copy;
 import re;
-import functools;
 import time;
 
 number_of_cups = 1000000;
-# number_of_cups = 9;
+moves_to_do = 1000;
+
+number_of_cups = 9;
+moves_to_do = 100;
 cupstring='389125467';
-# cupstring='789465123';
+
+cupstring='789465123';
 
 cups=list(map(int,list(cupstring)));
 #  add the extra cups
@@ -23,18 +26,15 @@ start = time.time();
 print("Started at " + str(time.gmtime(start)));
 
 
-# @functools.lru_cache()
-def get_destination(current_cup, candidates):
+def get_destination(current_cup, exempt):
     candidate = current_cup;
-    while ( not candidate in candidates ):
+    while ( candidate in exempt + [current_cup] ):
         candidate = candidate - 1;
         if (candidate == 0):
-            # print('Having to go to the highest one now!');
             candidate = number_of_cups; 
-    return candidate;    
+    return candidate;  
 
-# @functools.lru_cache()
-def do_a_round(cups):
+def do_a_move(cups):
     current_cup = cups.pop(0);
     # print('Current cup = ' + str(current_cup));
     #  + ', cups = ' + str(cups));
@@ -44,7 +44,7 @@ def do_a_round(cups):
     remainder = cups[3:];
     # print('three_to_move = ' + str(three_to_move) + ', remainder = ' + str(remainder));
     # print('three_to_move = ' + str(three_to_move));
-    dest = get_destination(current_cup, remainder);
+    dest = get_destination(current_cup, three_to_move);
     # print('dest = ' + str(dest));
 
     #  now stick em in...
@@ -61,13 +61,12 @@ def do_a_round(cups):
     return new_cups;
 
 
-# for i in range(10000000):
-for i in range(10000):
+for i in range(moves_to_do):
     # if (i+1)%1000 == 0:
     if i%1000 == 0:
-        print('Playing round ' + str(i+1));
+        print('Playing move ' + str(i+1));
         print('time taken so far = ' + str((time.time()-start)/60) + ' minutes');
-    cups = do_a_round(cups);
+    cups = do_a_move(cups);
     # print(cups);
 
 
@@ -84,5 +83,8 @@ print('FINAL RESULT = ' + str(first_one*second_one));
 end = time.time();
 print("It took this many seconds: " + str(end-start));
 print("It took this many minutes: " + str((end-start)/60));
+
+if (len(cups)<1000):
+    print('final order = ' + str(cups));
 
 
