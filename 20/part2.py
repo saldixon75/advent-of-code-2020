@@ -1,4 +1,3 @@
-import numpy;
 import sys;
 import copy;
 import re;
@@ -27,9 +26,9 @@ def catalogue_edge(edge, id):
         tiles_by_edge[edge[::-1]] = [id+'-flipped'];
 
 for tile in tiles:
-    print(tile);
+    # print(tile);
     lines = list(filter(lambda x: len(x)>0, tile.split('\n')));
-    print('There are ' + str(len(lines)) + ' lines' );
+    # print('There are ' + str(len(lines)) + ' lines' );
     id = re.match('Tile (\d+):',lines[0]).groups()[0];
     lines.pop(0);
     top_edge = lines[0];
@@ -43,11 +42,11 @@ for tile in tiles:
     left_edge_array.reverse();
     left_edge = ''.join(left_edge_array);
     right_edge = ''.join(right_edge_array);
-    print("Tile id = " + str(id) + ' edges are ...');
-    print(top_edge);     
-    print(right_edge);     
-    print(bottom_edge);     
-    print(left_edge); 
+    # print("Tile id = " + str(id) + ' edges are ...');
+    # print(top_edge);     
+    # print(right_edge);     
+    # print(bottom_edge);     
+    # print(left_edge); 
     
     # print('Reversed edges are ...');
 
@@ -56,7 +55,7 @@ for tile in tiles:
     catalogue_edge(bottom_edge,id);
     catalogue_edge(right_edge,id);
 
-print(tiles_by_edge);
+# print(tiles_by_edge);
 
 #  now see if there are any edges that occur only once in the matrix. 
 
@@ -70,8 +69,7 @@ for edge in tiles_by_edge.keys():
         else:
             outside_edges_by_tile_id[tile_id] = [edge];
 
-print('outsid edges ');
-print(outside_edges_by_tile_id);
+# print(outside_edges_by_tile_id);
 
 # now tiles_by_id list the outside edges for a tile
 for tile in outside_edges_by_tile_id:
@@ -79,9 +77,6 @@ for tile in outside_edges_by_tile_id:
         print('CORNER PIECE!!!! id=' + tile);
 
 
-# too high:  21599956000000 
+#  need to assemble the tiles... having found teh corner pieces.. we will have to figure out where all the others go.
 
-print('answer is .. ' + str(2521*2633*3067*1061));
 
-#  20899048083289
-#  21599956000000
